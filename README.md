@@ -8,13 +8,13 @@
 [![Unsplash](https://img.shields.io/badge/API-Unsplash-black?style=flat&logo=unsplash)](https://unsplash.com/developers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/MatheusLopesLemos/OpenWeather-API/blob/main/LICENSE)
 
-Uma aplicação moderna de previsão do tempo que combina dados meteorológicos em tempo real com imagens dinâmicas baseadas nas condições climáticas.
+Uma aplicação para estudo de previsão do tempo que combina dados meteorológicos em tempo real com imagens dinâmicas baseadas nas condições climáticas.
 
 ---
 
 ##  O que é e como funciona
 
-O OpenWeather App é uma aplicação web responsiva que permite consultar a previsão do tempo de qualquer cidade do mundo. Ao realizar uma busca, o sistema:
+O OpenWeather App é uma aplicação web que permite consultar a previsão do tempo de qualquer cidade do mundo. Ao realizar uma busca, o sistema:
 
 1. Consulta a API do OpenWeatherMap para obter as condições climáticas atuais com base no nome da cidade.
 2. Utiliza essas condições (como "clear", "rain", "snow", etc.) para realizar uma busca na API do Unsplash por imagens relacionadas ao clima e à cidade.
@@ -28,10 +28,9 @@ Esse comportamento foi pensado para oferecer não apenas utilidade, mas também 
 
 - 🔍 Buscar clima atual por nome da cidade
 - 📍 Utilização do nome da cidade na pesquisa de imagens
-- ☀️ Exibir temperatura, sensação térmica, umidade, vento e descrição do clima
+- ☀️ Exibir temperatura, umidade e descrição do clima
 - 🖼️ Exibir imagens aleatórias relacionadas ao clima atual e à cidade
 - 🔀 Geração aleatória de página e imagem a cada nova consulta
-- 📱 Interface responsiva para dispositivos móveis e desktops
 
 ---
 
