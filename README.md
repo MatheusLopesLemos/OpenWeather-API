@@ -12,7 +12,7 @@ Uma aplicação moderna de previsão do tempo que combina dados meteorológicos 
 
 ---
 
-## 🤩 O que é e como funciona
+##  O que é e como funciona
 
 O OpenWeather App é uma aplicação web responsiva que permite consultar a previsão do tempo de qualquer cidade do mundo. Ao realizar uma busca, o sistema:
 
@@ -24,7 +24,7 @@ Esse comportamento foi pensado para oferecer não apenas utilidade, mas também 
 
 ---
 
-## 📌 Funcionalidades
+##  Funcionalidades
 
 - 🔍 Buscar clima atual por nome da cidade
 - 📍 Utilização do nome da cidade na pesquisa de imagens
@@ -35,7 +35,7 @@ Esse comportamento foi pensado para oferecer não apenas utilidade, mas também 
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - React.js + Vite
 - TailwindCSS para estilização
@@ -46,7 +46,7 @@ Esse comportamento foi pensado para oferecer não apenas utilidade, mas também 
 
 ---
 
-## ⚙️ Pré-requisitos
+##  Pré-requisitos
 
 - Node.js 18+
 - Git
@@ -56,7 +56,7 @@ Esse comportamento foi pensado para oferecer não apenas utilidade, mas também 
 
 ---
 
-## 🚀 Instalação
+##  Instalação
 
 1. Clone o repositório:
 
@@ -120,7 +120,7 @@ vite.config.js
 
 ---
 
-## 🦾 Licença
+##  Licença
 
 Este projeto está licenciado sob a Licença MIT.  
 Consulte o arquivo [LICENSE](https://github.com/MatheusLopesLemos/OpenWeather-API/blob/main/LICENSE) para mais informações.
