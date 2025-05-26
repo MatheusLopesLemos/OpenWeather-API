@@ -1,41 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { getWeatherByCity } from "../../services/weatherService";
+import {
+  getWeatherByCity,
+  getWeatherByCoords,
+} from "../../services/weatherService";
 import { getImageByQuery } from "../../services/unsplashService";
 
 const Home = () => {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Função para buscar o clima e a imagem
-  const fetchWeather = async (queryCity) => {
-  if (!queryCity.trim()) return;
+  const getLocalTime = (timezone) => {
+    const now = new Date();
+    const utcTime = now.getTime() + now.getTimezoneOffset() * 60000; // UTC em ms
+    const localTime = new Date(utcTime + timezone * 1000);
+    return localTime.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const fetchWeather = useCallback(async (queryCity) => {
+    if (!queryCity.trim()) return;
+    setLoading(true);
+    setError(null);
 
     try {
       const data = await getWeatherByCity(queryCity.trim());
       setWeather(data);
 
-      // Busca imagem baseada no nome da cidade e no clima
       const imageQuery = `${data.name} ${data.weather[0].description}`;
       const imageUrl = await getImageByQuery(imageQuery);
       setBackgroundImage(imageUrl);
     } catch (error) {
-      console.error("Erro ao buscar o clima ou imagem:", error);
+      setError("Não foi possível buscar o clima para essa cidade.");
+      setWeather(null);
+      setBackgroundImage(null);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const getLocalTime = (timezone) => {
-    const now = new Date();
-    const localTime = new Date(now.getTime() + timezone * 1000);
-    return localTime.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-  };
-
-
-  // Buscar clima e imagem ao carregar a página
-  useEffect(() => {
-    fetchWeather("Rio de Janeiro");
   }, []);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          setLoading(true);
+          setError(null);
+          try {
+            const { latitude, longitude } = position.coords;
+            const data = await getWeatherByCoords(latitude, longitude);
+            setWeather(data);
+
+            const imageQuery = `${data.name} ${data.weather[0].description}`;
+            const imageUrl = await getImageByQuery(imageQuery);
+            setBackgroundImage(imageUrl);
+          } catch (error) {
+            fetchWeather("Rio de Janeiro");
+          } finally {
+            setLoading(false);
+          }
+        },
+        () => {
+          fetchWeather("Rio de Janeiro");
+        }
+      );
+    } else {
+      fetchWeather("Rio de Janeiro");
+    }
+  }, [fetchWeather]);
 
   return (
     <div
@@ -64,35 +100,44 @@ const Home = () => {
           <FaMagnifyingGlass />
         </button>
 
-        <div className="mt-7">
-          <h2 className="text-white text-2xl max-w-md w-[95%]">
+        <div className="mt-7 max-w-md w-[95%]">
+          <h2 className="text-white text-2xl">
             Tempo em {weather ? weather.name : "—"}
           </h2>
-          <p className="text-white text-xl mt-5">
-            {weather ? Math.round(weather.main.temp) + "°C" : "-- °C"}
-          </p>
-          <div className="flex items-center mt-5">
-            {weather ? (
-              <>
+
+          {loading ? (
+            <p className="text-white mt-5">Carregando...</p>
+          ) : error ? (
+            <p className="text-red-400 mt-5">{error}</p>
+          ) : weather ? (
+            <>
+              <p className="text-white text-xl mt-5">
+                {Math.round(weather.main.temp)}°C
+              </p>
+
+              <div className="flex items-center mt-5">
                 <img
                   className="w-14 h-14"
-                  src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                  src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
                   alt={weather.weather[0].description}
                 />
                 <p className="text-white text-base ml-3 capitalize">
                   {weather.weather[0].description}
                 </p>
-              </>
-            ) : (
-              <p className="text-white text-base ml-3">Carregando...</p>
-            )}
-          </div>
-          <p className="text-white text-base mt-5">
-            Hora local: {weather ? getLocalTime(weather.timezone): "--:--"}
-          </p>
-          <p className="text-white text-base ">
-            Umidade: {weather ? weather.main.humidity + "%" : "--"}
-          </p>
+              </div>
+
+              <p className="text-white text-base mt-5">
+                Hora local: {getLocalTime(weather.timezone)}
+              </p>
+              <p className="text-white text-base ">
+                Umidade: {weather.main.humidity}%
+              </p>
+            </>
+          ) : (
+            <p className="text-white mt-5">
+              Digite uma cidade para buscar o clima.
+            </p>
+          )}
         </div>
       </div>
     </div>

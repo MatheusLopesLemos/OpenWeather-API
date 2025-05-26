@@ -5,9 +5,10 @@ const unsplashAccessKey = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
 export const getImageByQuery = async (query) => {
   try {
     const perPage = 5; // máximo de imagens por página
-    const maxPages = 10; // limite de páginas aleatórias (ajuste conforme quiser)
+    const maxPages = 10; // limite de páginas aleatórias
 
-    const randomPage = Math.floor(Math.random() * maxPages) + 1; // página aleatória entre 1 e 10
+    // Escolhe uma página aleatória de 1 até maxPages
+    const randomPage = Math.floor(Math.random() * maxPages) + 1;
 
     const response = await axios.get("https://api.unsplash.com/search/photos", {
       params: {
@@ -21,12 +22,15 @@ export const getImageByQuery = async (query) => {
       },
     });
 
-    if (response.data.results.length > 0) {
-      const randomIndex = Math.floor(Math.random() * response.data.results.length);
-      return response.data.results[randomIndex].urls.regular;
+    const results = response.data.results;
+
+    if (results.length > 0) {
+      // Seleciona aleatoriamente uma imagem entre as resultados da página
+      const randomIndex = Math.floor(Math.random() * results.length);
+      return results[randomIndex].urls.regular;
     }
 
-    // fallback caso não ache imagem
+    // fallback caso não encontre nenhuma imagem
     return null;
   } catch (error) {
     console.error("Erro ao buscar imagem no Unsplash:", error);
